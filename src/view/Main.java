@@ -3,9 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
-
-import view.Front;
+package view;
 
 /**
  *
@@ -19,7 +17,7 @@ public class Main {
     private static final Integer OCUPACAO_40 = 40, OCUPACAO_80 = 80, OCUPACAO_90 = 90, OCUPACAO_99 = 99; 
     
     public static void main(String[] args) {
-        Front view = new Front();        
+        Start view = new Start();        
 /******************* Usuário passa os parâmetros ****************************/
 
 //        view.interfaceUsuario();
@@ -27,10 +25,10 @@ public class Main {
 //***************************************************************************/
 
 /******************* Parâmetros pré-definidos *******************************/
-//        view.cenarios(OCUPACAO_40);
+        view.cenarios(OCUPACAO_40);
 //        view.cenarios(OCUPACAO_80);
 //        view.cenarios(OCUPACAO_90);
-        view.cenarios(OCUPACAO_99);        
+//        view.cenarios(OCUPACAO_99);        
 
 //**************************************************************************/
     }   

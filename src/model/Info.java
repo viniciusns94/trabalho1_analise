@@ -10,11 +10,11 @@ package model;
  * @author Vinicius_2
  */
 public class Info {
-    public Double numeroEventos;
-    public Double somaAreas;
-    public Double tempoAnterior;
+    public double numeroEventos;
+    public double somaAreas;
+    public double tempoAnterior;
     
-    public Info(Double numeroEventos, Double somaAreas, Double tempoAnterior){
+    public Info(double numeroEventos, double somaAreas, double tempoAnterior){
         this.numeroEventos = numeroEventos;
         this.somaAreas = somaAreas;
         this.tempoAnterior = tempoAnterior;

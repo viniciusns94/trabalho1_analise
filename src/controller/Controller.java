@@ -16,13 +16,13 @@ public class Controller {
     private final Random gerador;
 
     public Controller() {
-//        this.gerador = new Random();
-        int semente = 1556915527;
-        System.out.println("Semente: " + semente);
         this.gerador = new Random();
+//        int semente = 1556915527;
+//        System.out.println("Semente: " + semente);
+//        this.gerador = new Random(semente);
     }
 
-    public Double aleatorio() {        
+    public Double aleatorio() {
         return gerador.nextDouble();
     }
 

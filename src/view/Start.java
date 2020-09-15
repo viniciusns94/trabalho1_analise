@@ -12,14 +12,14 @@ import java.util.Scanner;
  *
  * @author Vinicius_2
  */
-public class Front {
+public class Start {
 
     private Double tempoMedioClientes;
     private Double tempoMedioAtendimento;
     private Double tempoSimulacao;
     private final Execute execute;
 
-    public Front() {
+    public Start() {
         execute = new Execute();
     }
 

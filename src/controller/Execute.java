@@ -14,15 +14,14 @@ import model.Info;
  */
 public class Execute {
 
-    private double tempo, chegadaCliente, saidaAtendimento, somaAtendimentos, ocupacao;
-    private Integer fila;
+    private double tempo, fila, chegadaCliente, saidaAtendimento, somaAtendimentos, ocupacao;
     private final Controller controller;
     private final Info eN, eWEntrada, eWSaida;
 
     public Execute() {
         this.controller = new Controller();
         this.saidaAtendimento = 0.0;
-        this.fila = 0;
+        this.fila = 0.0;
         this.somaAtendimentos = 0.0;
         this.eN = new Info(0.0, 0.0, 0.0);
         this.eWEntrada = new Info(0.0, 0.0, 0.0);
@@ -45,10 +44,9 @@ public class Execute {
             }
 
             if (tempo == chegadaCliente) {
-                //printf("Chegada de cliente: %lF\n", chegada_cliente);
                 //evento de chegada de cliente
                 fila++;
-                //printf("fila: %lF\n", fila);
+                
                 //indica que o caixa esta ocioso
                 //logo, pode-se comecar a atender
                 //o cliente que acaba de chegar
@@ -58,17 +56,11 @@ public class Execute {
                 //gerar o tempo de chegada do proximo cliente
                 chegadaCliente = tempo + (-1.0 / tempoMedioClientes) * log(controller.aleatorio());
 
-//                if (saidaAtendimento < chegadaCliente) {
-//                    ocupacao += saidaAtendimento - tempo;
-//                } else {
-//                    ocupacao += chegadaCliente - tempo;
-//                }
-
                 //calculo do E[N]
                 eN.somaAreas += eN.numeroEventos * (tempo - eN.tempoAnterior);
                 eN.tempoAnterior = tempo;
                 eN.numeroEventos++;
-
+                
                 //calculo do E[W]
                 eWEntrada.somaAreas += eWEntrada.numeroEventos * (tempo - eWEntrada.tempoAnterior);
                 eWEntrada.tempoAnterior = tempo;
@@ -85,15 +77,8 @@ public class Execute {
                 if (fila > 0.0) {
                     fila--;
                     double tempoAtendimento = (-1.0 / tempoMedioAtendimento) * log(controller.aleatorio());
-                    saidaAtendimento = tempo + tempoMedioAtendimento;
+                    saidaAtendimento = tempo + tempoAtendimento;
                     somaAtendimentos += tempoAtendimento;
-
-//                    if (saidaAtendimento < chegadaCliente) {
-//                        ocupacao += saidaAtendimento - tempo;
-//                    } else {
-//                        ocupacao += chegadaCliente - tempo;
-//                    }
-
                 } else {
                     saidaAtendimento = 0.0;
                 }
@@ -125,8 +110,6 @@ public class Execute {
         System.out.printf("Ocupacao: %.5f\n", somaAtendimentos / tempo);
         System.out.printf("E[N]: %.15f\n", eNFinal);
         System.out.printf("E[W]: %.10f\n", eW);
-        //Little --> en = lambda * ew
-        //Little --> en - lambda * ew ~ 0.0
         System.out.printf("Validação little λ: %.15f\n", (eNFinal - lambda * eW));
     }
 }
