@@ -32,32 +32,32 @@ public class Start {
 
         System.out.printf("Informe o tempo total de simulacao (segundos): ");
         tempoSimulacao = input.nextDouble();
+        
+        System.out.printf("Informe o intervalo de tempo (segundos): ");
+        intervaloDeTempo = input.nextDouble();
 
         execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempo);
     }
 
     public void cenarios(int simulacao) {
         tempoSimulacao = 100000.0;
-        intervaloDeTempo = 100.0;      
+        intervaloDeTempo = 100.0;
+        tempoMedioClientes = 0.5;
         switch (simulacao) {
-            case 40://ocupação 40% //TODO alterar parametros
-                tempoMedioClientes = 0.25;
-                tempoMedioAtendimento = 0.15;
+            case 40://ocupação 40% 
+                tempoMedioAtendimento = tempoMedioClientes * 40000 / (tempoSimulacao);
                 execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempo);
                 break;
             case 80://ocupação 80%
-                tempoMedioClientes = 2.00;
-                tempoMedioAtendimento = 1.60;
+                tempoMedioAtendimento = tempoMedioClientes * 80000 / (tempoSimulacao);
                 execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempo);
                 break;
             case 90://ocupação 90%
-                tempoMedioClientes = 0.50;
-                tempoMedioAtendimento = 0.45;
+                tempoMedioAtendimento = tempoMedioClientes * 90000 / (tempoSimulacao);
                 execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempo);
                 break;
             case 99://ocupação 99%
-                tempoMedioClientes = 3.00;
-                tempoMedioAtendimento = 2.97;
+                tempoMedioAtendimento = tempoMedioClientes * 99000 / (tempoSimulacao);
                 execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempo);
                 break;
             default:

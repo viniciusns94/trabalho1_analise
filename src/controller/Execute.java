@@ -28,11 +28,11 @@ public class Execute {
         this.eWSaida = new Info(0.0, 0.0, 0.0);
     }
 
-    public void simulacao(double tempoMedioClientes, double tempoMedioAtendimento, double tempoSimulacao, double intervaloDeTempo) {
-        tempoMedioClientes = 2.0 / tempoMedioClientes;
+    public void simulacao(double tempoMedioClientes, double tempoMedioAtendimento, double tempoSimulacao, double intervaloDeTempoConstante) {
+        tempoMedioClientes = 1.0 / tempoMedioClientes;
         tempoMedioAtendimento = 1.0 / tempoMedioAtendimento;
         chegadaCliente = (-1.0 / tempoMedioClientes) * log(controller.aleatorio());
-        double intervaloDeTempoCrescente = intervaloDeTempo;
+        double intervaloDeTempoVariavel = intervaloDeTempoConstante;
         
         while (tempo <= tempoSimulacao) {
             //nao existe cliente sendo atendido no momento atual,
@@ -94,8 +94,8 @@ public class Execute {
                     eWSaida.numeroEventos++;
                 }
             }
-            if(tempo >= intervaloDeTempoCrescente){
-                intervaloDeTempoCrescente += intervaloDeTempo;
+            if(tempo >= intervaloDeTempoVariavel){
+                intervaloDeTempoVariavel += intervaloDeTempoConstante;
                 System.out.printf("Tempo: %.15f\n", tempo);
                 System.out.printf("E[N]: %.15f\n", eN.somaAreas / tempo);
                 System.out.printf("E[W]: %.10f\n", (eWEntrada.somaAreas - eWSaida.somaAreas) / (double) eWEntrada.numeroEventos);
