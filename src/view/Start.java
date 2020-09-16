@@ -14,9 +14,7 @@ import java.util.Scanner;
  */
 public class Start {
 
-    private Double tempoMedioClientes;
-    private Double tempoMedioAtendimento;
-    private Double tempoSimulacao;
+    private double tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempo;
     private final Execute execute;
 
     public Start() {
@@ -35,34 +33,32 @@ public class Start {
         System.out.printf("Informe o tempo total de simulacao (segundos): ");
         tempoSimulacao = input.nextDouble();
 
-        execute.start(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao);
+        execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempo);
     }
 
     public void cenarios(int simulacao) {
+        tempoSimulacao = 100000.0;
+        intervaloDeTempo = 100.0;      
         switch (simulacao) {
             case 40://ocupação 40% //TODO alterar parametros
                 tempoMedioClientes = 0.25;
                 tempoMedioAtendimento = 0.15;
-                tempoSimulacao = 10000.0;
-                execute.start(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao);
+                execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempo);
                 break;
             case 80://ocupação 80%
                 tempoMedioClientes = 2.00;
                 tempoMedioAtendimento = 1.60;
-                tempoSimulacao = 10000.0;
-                execute.start(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao);
+                execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempo);
                 break;
             case 90://ocupação 90%
                 tempoMedioClientes = 0.50;
                 tempoMedioAtendimento = 0.45;
-                tempoSimulacao = 10000.0;
-                execute.start(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao);
+                execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempo);
                 break;
             case 99://ocupação 99%
                 tempoMedioClientes = 3.00;
                 tempoMedioAtendimento = 2.97;
-                tempoSimulacao = 10000.0;
-                execute.start(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao);
+                execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempo);
                 break;
             default:
                 System.out.printf("\t\tERRO! \n\tEsta simulação não foi pré definida !");

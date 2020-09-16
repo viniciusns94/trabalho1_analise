@@ -28,11 +28,12 @@ public class Execute {
         this.eWSaida = new Info(0.0, 0.0, 0.0);
     }
 
-    public void start(Double tempoMedioClientes, Double tempoMedioAtendimento, Double tempoSimulacao) {
-        tempoMedioClientes = 1.0 / tempoMedioClientes;
+    public void simulacao(double tempoMedioClientes, double tempoMedioAtendimento, double tempoSimulacao, double intervaloDeTempo) {
+        tempoMedioClientes = 2.0 / tempoMedioClientes;
         tempoMedioAtendimento = 1.0 / tempoMedioAtendimento;
         chegadaCliente = (-1.0 / tempoMedioClientes) * log(controller.aleatorio());
-
+        double intervaloDeTempoCrescente = intervaloDeTempo;
+        
         while (tempo <= tempoSimulacao) {
             //nao existe cliente sendo atendido no momento atual,
             //de modo que a simulacao pode avancar no tempo para
@@ -42,7 +43,6 @@ public class Execute {
             } else {
                 tempo = controller.minimo(chegadaCliente, saidaAtendimento);
             }
-
             if (tempo == chegadaCliente) {
                 //evento de chegada de cliente
                 fila++;
@@ -82,7 +82,6 @@ public class Execute {
                 } else {
                     saidaAtendimento = 0.0;
                 }
-
                 if (eN.tempoAnterior < tempo) {
                     //calculo do E[N]
                     eN.somaAreas += eN.numeroEventos * (tempo - eN.tempoAnterior);
@@ -94,6 +93,13 @@ public class Execute {
                     eWSaida.tempoAnterior = tempo;
                     eWSaida.numeroEventos++;
                 }
+            }
+            if(tempo >= intervaloDeTempoCrescente){
+                intervaloDeTempoCrescente += intervaloDeTempo;
+                System.out.printf("Tempo: %.15f\n", tempo);
+                System.out.printf("E[N]: %.15f\n", eN.somaAreas / tempo);
+                System.out.printf("E[W]: %.10f\n", (eWEntrada.somaAreas - eWSaida.somaAreas) / (double) eWEntrada.numeroEventos);
+                System.out.printf("------------------------------------------------\n");
             }
         }
         if (saidaAtendimento > tempo) {
