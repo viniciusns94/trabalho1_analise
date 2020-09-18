@@ -16,15 +16,15 @@ public class Controller {
     private final Random gerador;
 
     public Controller() {
-//        int semente = 145824418;
-//        System.out.println("Semente: " + semente);
-//        this.gerador = new Random(semente);
-
-        this.gerador = new Random();
+        int semente = 10203040;
+        System.out.println("Semente: " + semente);
+        this.gerador = new Random(semente);
+//        this.gerador = new Random();
     }
 
     public Double aleatorio() {
-        return gerador.nextDouble();
+        Double n = gerador.nextDouble();
+        return n;
     }
 
     public Double minimo(Double num1, Double num2) {
