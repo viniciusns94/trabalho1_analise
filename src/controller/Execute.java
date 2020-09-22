@@ -94,13 +94,13 @@ public class Execute {
                     eWSaida.numeroEventos++;
                 }
             }
-            if(tempo >= intervaloDeTempoVariavel){
-                intervaloDeTempoVariavel += intervaloDeTempoConstante;
-                System.out.printf("Tempo: %.15f\n", tempo);
-                System.out.printf("E[N]: %.15f\n", eN.somaAreas / tempo);
-                System.out.printf("E[W]: %.10f\n", (eWEntrada.somaAreas - eWSaida.somaAreas) / (double) eWEntrada.numeroEventos);
-                System.out.printf("------------------------------------------------\n");
-            }
+//            if(tempo >= intervaloDeTempoVariavel){
+//                intervaloDeTempoVariavel += intervaloDeTempoConstante;
+//                System.out.printf("Tempo: %.15f\n", tempo);
+//                System.out.printf("E[N]: %.15f\n", eN.somaAreas / tempo);
+//                System.out.printf("E[W]: %.10f\n", (eWEntrada.somaAreas - eWSaida.somaAreas) / (double) eWEntrada.numeroEventos);
+//                System.out.printf("------------------------------------------------\n");
+//            }
         }
         if (saidaAtendimento > tempo) {
             somaAtendimentos -= (saidaAtendimento - tempo);
@@ -113,9 +113,11 @@ public class Execute {
         double eW = (eWEntrada.somaAreas - eWSaida.somaAreas) / (double) eWEntrada.numeroEventos;
         double lambda = eWEntrada.numeroEventos / tempo;
 
-        System.out.printf("Ocupacao: %.5f\n", somaAtendimentos / tempo);
-        System.out.printf("E[N]: %.15f\n", eNFinal);
-        System.out.printf("E[W]: %.10f\n", eW);
-        System.out.printf("Validação little λ: %.15f\n", (eNFinal - lambda * eW));
+        System.out.printf("I) Tempo médio de atendimento: %.2f sg.\n", tempoMedioAtendimento);
+        System.out.printf("II)\tOcupacao: %.5f\n", somaAtendimentos / tempo);
+        System.out.printf("\tλ: %.5f\n", lambda);
+        System.out.printf("\tE[N]: %.15f\n", eNFinal);
+        System.out.printf("\tE[W]: %.10f\n", eW);
+        System.out.printf("III)Validação little: %.15f\n", (eNFinal - lambda * eW));
     }
 }

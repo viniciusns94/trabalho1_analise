@@ -25,10 +25,10 @@ public class Main {
 //***************************************************************************/
 
 /******************* Parâmetros pré-definidos *******************************/
-        view.cenarios(OCUPACAO_40);
+//        view.cenarios(OCUPACAO_40);
 //        view.cenarios(OCUPACAO_80);
 //        view.cenarios(OCUPACAO_90);
-//        view.cenarios(OCUPACAO_99);        
+        view.cenarios(OCUPACAO_99);        
 
 //**************************************************************************/
     }   

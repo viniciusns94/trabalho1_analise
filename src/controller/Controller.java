@@ -17,7 +17,7 @@ public class Controller {
 
     public Controller() {
         int semente = 10203040;
-        System.out.println("Semente: " + semente);
+//        System.out.println("Semente: " + semente);
         this.gerador = new Random(semente);
 //        this.gerador = new Random();
     }
