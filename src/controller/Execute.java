@@ -36,11 +36,17 @@ public class Execute {
     }
 
     public void simulacao(double tempoMedioClientes, double tempoMedioAtendimento, double tempoSimulacao, double intervaloDeTempoConstante) {
+        
+        System.out.printf("******DADOS INICIAIS******\n");
+        System.out.printf("Tempo médio chegada de clientes: %.2f sg.\n", tempoMedioClientes);
+        System.out.printf("Tempo médio de atendimento: %.2f sg.\n", tempoMedioAtendimento);
+        System.out.printf("Tempo de simulacao: %.2f mlsg.\n", tempoSimulacao);
+        
         tempoMedioClientes = 1.0 / tempoMedioClientes;
         tempoMedioAtendimento = 1.0 / tempoMedioAtendimento;
-        chegadaCliente = (-1.0 / tempoMedioClientes) * log(controller.aleatorio());
+        chegadaCliente = (-1.0 / tempoMedioClientes) * log(controller.aleatorio());        
         double intervaloDeTempoVariavel = intervaloDeTempoConstante;
-
+       
         while (tempo <= tempoSimulacao) {
             //nao existe cliente sendo atendido no momento atual,
             //de modo que a simulacao pode avancar no tempo para
@@ -144,6 +150,7 @@ public class Execute {
         } catch (IOException ex) {
             Logger.getLogger(Execute.class.getName()).log(Level.SEVERE, null, ex);
         }
+        System.out.printf("\n******DADOS FINAIS******\n");
         System.out.printf("I) Tempo médio de atendimento: %.2f sg.\n", tempoMedioAtendimento);
         System.out.printf("II)\tOcupacao: %.5f\n", somaAtendimentos / tempo);
         System.out.printf("\tλ: %.5f\n", lambda);

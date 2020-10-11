@@ -20,7 +20,7 @@ public class Main {
         Start view = new Start();        
 /******************* Usuário passa os parâmetros ****************************/
 
-//        view.interfaceUsuario();
+        view.interfaceUsuario();
 
 //***************************************************************************/
 
@@ -28,7 +28,7 @@ public class Main {
 //        view.cenarios(OCUPACAO_40);
 //        view.cenarios(OCUPACAO_80);
 //        view.cenarios(OCUPACAO_90);
-        view.cenarios(OCUPACAO_99);        
+//        view.cenarios(OCUPACAO_99);        
 
 //**************************************************************************/
     }   

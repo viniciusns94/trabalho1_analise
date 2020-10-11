@@ -14,7 +14,8 @@ import java.util.Scanner;
  */
 public class Start {
 
-    private double tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempo;
+    private double tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempoPlotarResultados;
+    private Integer escolhaCenario = 0;
     private final Execute execute;
 
     public Start() {
@@ -24,44 +25,57 @@ public class Start {
     public void interfaceUsuario() {
         Scanner input = new Scanner(System.in);
 
-        System.out.printf("Informe o tempo medio entre a chegada de clientes (segundos): ");
+        System.out.println("Informe o cenário para simulação \n"
+                + "\t1 - 40% da capacidade"
+                + "\t2 - 80% da capacidade"
+                + "\t3 - 90% da capacidade"
+                + "\t4 - 99% da capacidade"
+                + "\t5 Deninir novo cenário");
+        escolhaCenario = input.nextInt();
+        cenarios(escolhaCenario);        
+    }
+    
+    private void cenarioNaoDefinido(){
+        Scanner input = new Scanner(System.in);
+        
+        System.out.printf("Informe o tempo medio entre a chegada de cada cliente ao caixa (em segundos): ");
         tempoMedioClientes = input.nextDouble();
 
-        System.out.printf("Informe o tempo medio gasto para atender cada cliente (segundos): ");
+        System.out.printf("Informe o tempo medio gasto para o atendimento do caixa para cada cliente (em segundos): ");
         tempoMedioAtendimento = input.nextDouble();
 
         System.out.printf("Informe o tempo total de simulacao (segundos): ");
         tempoSimulacao = input.nextDouble();
-        
-        System.out.printf("Informe o intervalo de tempo para o atendimento (segundos): ");
-        intervaloDeTempo = input.nextDouble();
 
-        execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempo);
+        System.out.printf("Informe o intervalo de tempo para o atendimento (segundos): ");
+        intervaloDeTempoPlotarResultados = input.nextDouble();
+        
+        execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempoPlotarResultados);
     }
 
-    public void cenarios(int simulacao) {
-        tempoSimulacao = 1200000.0;
-        intervaloDeTempo = 600.0;
+    public void cenarios(Integer simulacao) {
+        tempoSimulacao = 10000.0;
+        intervaloDeTempoPlotarResultados = 100.0;
         tempoMedioClientes = 1.00;
         switch (simulacao) {
-            case 40://ocupação 40% 
-                tempoMedioAtendimento = tempoMedioClientes * 40000 / (tempoSimulacao);
-                execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempo);
+            case 1://ocupação 40% 
+                tempoMedioAtendimento = tempoMedioClientes * (0.40 * tempoSimulacao) / (tempoSimulacao);
+                execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempoPlotarResultados);
                 break;
-            case 80://ocupação 80%
-                tempoMedioAtendimento = tempoMedioClientes * 80000 / (tempoSimulacao);
-                execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempo);
+            case 2://ocupação 80%
+                tempoMedioAtendimento = tempoMedioClientes * (0.80 * tempoSimulacao) / (tempoSimulacao);
+                execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempoPlotarResultados);
                 break;
-            case 90://ocupação 90%
-                tempoMedioAtendimento = tempoMedioClientes * 90000 / (tempoSimulacao);
-                execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempo);
+            case 3://ocupação 90%
+                tempoMedioAtendimento = tempoMedioClientes * (0.90 * tempoSimulacao) / (tempoSimulacao);
+                execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempoPlotarResultados);
                 break;
-            case 99://ocupação 99%
-                tempoMedioAtendimento = tempoMedioClientes * 99000 / (tempoSimulacao);
-                execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempo);
+            case 4://ocupação 99%
+                tempoMedioAtendimento = tempoMedioClientes * (0.99 * tempoSimulacao) / (tempoSimulacao);
+                execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempoPlotarResultados);
                 break;
             default:
-                System.out.printf("\t\tERRO! \n\tEsta simulação não foi pré definida!");
+                cenarioNaoDefinido();
                 break;
         }
     }
