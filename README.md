@@ -32,6 +32,7 @@ Forma de envio: Deverá ser submetido no Moodle um arquivo em formato .zip conte
 internamente o Projeto do NetBeans e o relatório em pdf. O trabalho pode ser desenvolvido
 em linguagem C ou Java.
 Bom trabalho! :-)
+
 -------------------------------------------------------------------------------------------------------
 Trabalho 2 – Análise de Desempenho
 Data de entrega: 16/10/2020 até as 23:55 no Moodle. Valor: 4,0.
