@@ -7,10 +7,12 @@ Prof. Flavio Barbieri Gonzaga – Universidade Federal de Alfenas – UNIFAL-MG
 Tomando como base o código de simulação desenvolvido até aqui, vocês devem executar 4
 cenários na simulação, com as respectivas ocupações:
 
+  ````
   > Ocupação == 40%
   > Ocupação == 80%
   > Ocupação == 90%
   > Ocupação == 99%
+  ````
 
 Em todos os cenários a chegada será de 2 requisições por segundo. Portanto, você deve alterar
 o tempo médio de atendimento de modo a obter cada um dos cenários acima.
@@ -59,7 +61,7 @@ loja, ou nesse caso, de 8 clientes/minuto (também de acordo com v.a. Exponencia
 
 Tomando como base o código de simulação desenvolvido até aqui, vocês devem executar 8
 cenários na simulação, com as respectivas características:
-
+ ```
 - 5 caixas
   > Relação entre a chegada e capacidade total de atendimento == 0,4
   > Relação entre a chegada e capacidade total de atendimento == 0,8
@@ -70,7 +72,7 @@ cenários na simulação, com as respectivas características:
   > Relação entre a chegada e capacidade total de atendimento == 0,8
   > Relação entre a chegada e capacidade total de atendimento == 0,9
   > Relação entre a chegada e capacidade total de atendimento == 0,99
-
+```
 A dupla deverá apresentar um relatório para cada cenário contendo:
   I) Estrutura de dados escolhida para se gerenciar os eventos da simulação, com a
   devida justificativa.
