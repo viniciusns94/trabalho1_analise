@@ -33,16 +33,16 @@ public class Start {
         System.out.printf("Informe o tempo total de simulacao (segundos): ");
         tempoSimulacao = input.nextDouble();
         
-        System.out.printf("Informe o intervalo de tempo (segundos): ");
+        System.out.printf("Informe o intervalo de tempo para o atendimento (segundos): ");
         intervaloDeTempo = input.nextDouble();
 
         execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempo);
     }
 
     public void cenarios(int simulacao) {
-        tempoSimulacao = 100000.0;
-        intervaloDeTempo = 100.0;
-        tempoMedioClientes = 0.5;
+        tempoSimulacao = 1200000.0;
+        intervaloDeTempo = 600.0;
+        tempoMedioClientes = 1.00;
         switch (simulacao) {
             case 40://ocupação 40% 
                 tempoMedioAtendimento = tempoMedioClientes * 40000 / (tempoSimulacao);
@@ -61,7 +61,7 @@ public class Start {
                 execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempo);
                 break;
             default:
-                System.out.printf("\t\tERRO! \n\tEsta simulação não foi pré definida !");
+                System.out.printf("\t\tERRO! \n\tEsta simulação não foi pré definida!");
                 break;
         }
     }

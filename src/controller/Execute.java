@@ -5,7 +5,12 @@
  */
 package controller;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import static java.lang.Math.log;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Info;
 
 /**
@@ -14,9 +19,11 @@ import model.Info;
  */
 public class Execute {
 
-    private double tempo, fila, chegadaCliente, saidaAtendimento, somaAtendimentos, ocupacao;
+    private double tempo, fila, chegadaCliente, saidaAtendimento, somaAtendimentos;
     private final Controller controller;
     private final Info eN, eWEntrada, eWSaida;
+    private FileWriter arqEn, arqWn;
+    private PrintWriter gravarArqEn, gravarArqWn;
 
     public Execute() {
         this.controller = new Controller();
@@ -33,7 +40,7 @@ public class Execute {
         tempoMedioAtendimento = 1.0 / tempoMedioAtendimento;
         chegadaCliente = (-1.0 / tempoMedioClientes) * log(controller.aleatorio());
         double intervaloDeTempoVariavel = intervaloDeTempoConstante;
-        
+
         while (tempo <= tempoSimulacao) {
             //nao existe cliente sendo atendido no momento atual,
             //de modo que a simulacao pode avancar no tempo para
@@ -46,7 +53,7 @@ public class Execute {
             if (tempo == chegadaCliente) {
                 //evento de chegada de cliente
                 fila++;
-                
+
                 //indica que o caixa esta ocioso
                 //logo, pode-se comecar a atender
                 //o cliente que acaba de chegar
@@ -60,7 +67,7 @@ public class Execute {
                 eN.somaAreas += eN.numeroEventos * (tempo - eN.tempoAnterior);
                 eN.tempoAnterior = tempo;
                 eN.numeroEventos++;
-                
+
                 //calculo do E[W]
                 eWEntrada.somaAreas += eWEntrada.numeroEventos * (tempo - eWEntrada.tempoAnterior);
                 eWEntrada.tempoAnterior = tempo;
@@ -94,13 +101,32 @@ public class Execute {
                     eWSaida.numeroEventos++;
                 }
             }
-//            if(tempo >= intervaloDeTempoVariavel){
-//                intervaloDeTempoVariavel += intervaloDeTempoConstante;
-//                System.out.printf("Tempo: %.15f\n", tempo);
-//                System.out.printf("E[N]: %.15f\n", eN.somaAreas / tempo);
-//                System.out.printf("E[W]: %.10f\n", (eWEntrada.somaAreas - eWSaida.somaAreas) / (double) eWEntrada.numeroEventos);
-//                System.out.printf("------------------------------------------------\n");
-//            }
+            try {
+                if (arqEn == null && arqWn == null) {
+                    arqEn = new FileWriter("d:\\E[N].txt");
+                    arqWn = new FileWriter("d:\\W[N].txt");
+                    gravarArqEn = new PrintWriter(arqEn);
+                    gravarArqWn = new PrintWriter(arqWn);
+                    gravarArqEn.printf("TEMPO\t\t\t\t\tE[N]\n");
+                    gravarArqWn.printf("TEMPO\t\t\t\t\tW[N]\n");
+                } else {
+                    if (tempo >= intervaloDeTempoVariavel) {
+                        intervaloDeTempoVariavel += intervaloDeTempoConstante;
+                        if (tempo < 1000) {
+                            gravarArqEn.printf("00%.15f\t%.15f\n", tempo, eN.somaAreas / tempo);
+                            gravarArqWn.printf("00%.15f\t%.10f\n", tempo, (eWEntrada.somaAreas - eWSaida.somaAreas) / (double) eWEntrada.numeroEventos);
+                        } else if (tempo < 1000000) {
+                            gravarArqEn.printf("0%.15f\t%.15f\n", tempo, eN.somaAreas / tempo);
+                            gravarArqWn.printf("0%.15f\t%.10f\n", tempo, (eWEntrada.somaAreas - eWSaida.somaAreas) / (double) eWEntrada.numeroEventos);
+                        } else {
+                            gravarArqEn.printf("%.15f\t%.15f\n", tempo, eN.somaAreas / tempo);
+                            gravarArqWn.printf("%.15f\t%.10f\n", tempo, (eWEntrada.somaAreas - eWSaida.somaAreas) / (double) eWEntrada.numeroEventos);
+                        }
+                    }
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Execute.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         if (saidaAtendimento > tempo) {
             somaAtendimentos -= (saidaAtendimento - tempo);
@@ -112,7 +138,12 @@ public class Execute {
         double eNFinal = eN.somaAreas / tempo;
         double eW = (eWEntrada.somaAreas - eWSaida.somaAreas) / (double) eWEntrada.numeroEventos;
         double lambda = eWEntrada.numeroEventos / tempo;
-
+        try {
+            arqEn.close();
+            arqWn.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Execute.class.getName()).log(Level.SEVERE, null, ex);
+        }
         System.out.printf("I) Tempo médio de atendimento: %.2f sg.\n", tempoMedioAtendimento);
         System.out.printf("II)\tOcupacao: %.5f\n", somaAtendimentos / tempo);
         System.out.printf("\tλ: %.5f\n", lambda);
