@@ -6,14 +6,12 @@ Prof. Flavio Barbieri Gonzaga – Universidade Federal de Alfenas – UNIFAL-MG
 
 Tomando como base o código de simulação desenvolvido até aqui, vocês devem executar 4
 cenários na simulação, com as respectivas ocupações:
-
   ````
   > Ocupação == 40%
   > Ocupação == 80%
   > Ocupação == 90%
   > Ocupação == 99%
   ````
-
 Em todos os cenários a chegada será de 2 requisições por segundo. Portanto, você deve alterar
 o tempo médio de atendimento de modo a obter cada um dos cenários acima.
 A dupla deverá apresentar um relatório para cada cenário contendo:
