@@ -14,15 +14,14 @@ import java.util.Scanner;
  * @author Vinicius_2
  */
 public class Start {
-    
-    private Controller controller;
+
     private double tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempoPlotarResultados;
     private Integer escolhaCenario, qtdCaixas;
     private final Execute execute;
 
     public Start() {
-        controller = new Controller();
         intervaloDeTempoPlotarResultados = 600.0;
+        tempoSimulacao = 1200000.0;
         execute = new Execute();
     }
 
@@ -30,12 +29,17 @@ public class Start {
         Scanner input = new Scanner(System.in);
 
         System.out.println("Informe o cenário para simulação \n"
-                + "\t1 - 40% da capacidade"
-                + "\t2 - 80% da capacidade"
-                + "\t3 - 90% da capacidade"
-                + "\t4 - 99% da capacidade"
-                + "\t5 Deninir novo cenário");
+                + "\t1 - 40% da capacidade\n"
+                + "\t2 - 80% da capacidade\n"
+                + "\t3 - 90% da capacidade\n"
+                + "\t4 - 99% da capacidade\n"
+                + "\t5 - Deninir novo cenário\n");
         escolhaCenario = input.nextInt();
+
+        if (escolhaCenario < 6) {
+            System.out.printf("Informe a quantidade de caixas disponiveis: ");
+        qtdCaixas = input.nextInt();
+        }
         cenarios(escolhaCenario);
     }
 
@@ -44,9 +48,6 @@ public class Start {
 
         System.out.printf("Informe o tempo medio de chegada de cliente por minuto: ");
         tempoMedioClientes = input.nextDouble() / 60.00;
-
-        System.out.printf("Informe a quantidade de caixas disponiveis: ");
-        qtdCaixas = input.nextInt();
 
         System.out.printf("Informe o relação entre chegada e a capacidade total de atendimento: ");
 
@@ -60,8 +61,7 @@ public class Start {
     }
 
     public void cenarios(Integer simulacao) {
-        tempoSimulacao = 1200000.0;    
-        qtdCaixas = 10;
+//        qtdCaixas = 10;
         switch (simulacao) {
             case 1://ocupação 40% 
                 tempoMedioAtendimento = qtdCaixas / 60.0;
@@ -83,8 +83,12 @@ public class Start {
                 tempoMedioClientes = 0.99 * tempoMedioAtendimento;
                 execute.simulacao(tempoMedioClientes, tempoMedioAtendimento, tempoSimulacao, intervaloDeTempoPlotarResultados, qtdCaixas);
                 break;
-            default:
+            case 5:
                 cenarioNaoDefinido();
+                break;
+            default:
+                System.out.println("Opção Inválida\n");
+                interfaceUsuario();
                 break;
         }
     }

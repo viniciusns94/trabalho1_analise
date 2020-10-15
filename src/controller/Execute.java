@@ -9,6 +9,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import static java.lang.Math.log;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Info;
@@ -18,28 +20,35 @@ import model.Info;
  * @author Vinicius_2
  */
 public class Execute {
-
-    private double tempo, fila, chegadaCliente, saidaAtendimento, somaAtendimentos;
+    
+    private double tempo, fila, chegadaCliente, somaAtendimentos;
     private final Controller controller;
     private final Info eN, eWEntrada, eWSaida;
+    private final Queue<Double> filaSaidaAtendimento;
     private FileWriter arqEn, arqWn;
     private PrintWriter gravarArqEn, gravarArqWn;
-
+    
     public Execute() {
         this.controller = new Controller();
-        this.saidaAtendimento = 0.0;
         this.fila = 0.0;
         this.somaAtendimentos = 0.0;
         this.eN = new Info(0.0, 0.0, 0.0);
         this.eWEntrada = new Info(0.0, 0.0, 0.0);
         this.eWSaida = new Info(0.0, 0.0, 0.0);
+        this.filaSaidaAtendimento = new PriorityQueue<>();
     }  
 
     public void simulacao(double tempoMedioClientes, double tempoMedioAtendimento, double tempoSimulacao, double intervaloDeTempoConstante, int qtdCaixas) {
-        System.out.printf("******DADOS INICIAIS******\n");
-        System.out.printf("Tempo médio chegada de clientes: %.2f sg.\n", tempoMedioClientes);
-        System.out.printf("Tempo médio de atendimento: %.2f sg.\n", tempoMedioAtendimento);
-        System.out.printf("Tempo de simulacao: %.2f mlsg.\n", tempoSimulacao);
+        System.out.printf("\n******DADOS INICIAIS******\n");
+        System.out.printf("Tempo médio chegada de clientes: %.2f\n", tempoMedioClientes);
+        System.out.printf("Tempo médio de atendimento: %.2f\n", tempoMedioAtendimento);
+        System.out.printf("Tempo de simulacao: %.2f\n", tempoSimulacao);
+        System.out.printf("Quantidade caixas disponíveis: %d\n", qtdCaixas);
+                
+        //adicionar fila de caixas
+        for (int i = 0; i < qtdCaixas; i++) {
+            filaSaidaAtendimento.add(0.0);
+        }
         
         chegadaCliente = (-1.0 / tempoMedioClientes) * log(controller.aleatorio());        
         double intervaloDeTempoVariavel = intervaloDeTempoConstante;
@@ -48,10 +57,10 @@ public class Execute {
             //nao existe cliente sendo atendido no momento atual,
             //de modo que a simulacao pode avancar no tempo para
             //a chegada do proximo cliente
-            if (saidaAtendimento == 0.0) {
+            if (filaSaidaAtendimento.peek() == 0.0) {
                 tempo = chegadaCliente;
             } else {
-                tempo = controller.minimo(chegadaCliente, saidaAtendimento);
+                tempo = controller.minimo(chegadaCliente, filaSaidaAtendimento.peek());
             }
             if (tempo == chegadaCliente) {
                 //evento de chegada de cliente
@@ -60,8 +69,9 @@ public class Execute {
                 //indica que o caixa esta ocioso
                 //logo, pode-se comecar a atender
                 //o cliente que acaba de chegar
-                if (saidaAtendimento == 0.0) {
-                    saidaAtendimento = tempo;
+                if (filaSaidaAtendimento.peek() == 0.0) {
+                    filaSaidaAtendimento.remove();//remove a cabeça da fila
+                    filaSaidaAtendimento.offer(tempo); //insere tempo  
                 }
                 //gerar o tempo de chegada do proximo cliente
                 chegadaCliente = tempo + (-1.0 / tempoMedioClientes) * log(controller.aleatorio());
@@ -87,10 +97,12 @@ public class Execute {
                 if (fila > 0.0) {
                     fila--;
                     double tempoAtendimento = (-1.0 / tempoMedioAtendimento) * log(controller.aleatorio());
-                    saidaAtendimento = tempo + tempoAtendimento;
+                    filaSaidaAtendimento.remove();//remove a cabeça da fila
+                    filaSaidaAtendimento.offer(tempo + tempoAtendimento); //insere tempo na head 
+                    
                     somaAtendimentos += tempoAtendimento;
                 } else {
-                    saidaAtendimento = 0.0;
+                    filaSaidaAtendimento.offer(0.0);
                 }
                 if (eN.tempoAnterior < tempo) {
                     //calculo do E[N]
@@ -106,8 +118,8 @@ public class Execute {
             }
             try {
                 if (arqEn == null && arqWn == null) {
-                    arqEn = new FileWriter("d:\\E[N].txt");
-                    arqWn = new FileWriter("d:\\W[N].txt");
+                    arqEn = new FileWriter("E[N].txt");
+                    arqWn = new FileWriter("W[N].txt");
                     gravarArqEn = new PrintWriter(arqEn);
                     gravarArqWn = new PrintWriter(arqWn);
                     gravarArqEn.printf("TEMPO\t\t\t\t\tE[N]\n");
@@ -131,8 +143,8 @@ public class Execute {
                 Logger.getLogger(Execute.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        if (saidaAtendimento > tempo) {
-            somaAtendimentos -= (saidaAtendimento - tempo);
+        if (filaSaidaAtendimento.peek() > tempo) {
+            somaAtendimentos -= (filaSaidaAtendimento.peek() - tempo);
         }
         //fazendo o calculo da ultima area dos graficos antes do termino da simulacao
         eWSaida.somaAreas += eWSaida.numeroEventos * (tempo - eWSaida.tempoAnterior);
