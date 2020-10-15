@@ -33,17 +33,14 @@ public class Execute {
         this.eN = new Info(0.0, 0.0, 0.0);
         this.eWEntrada = new Info(0.0, 0.0, 0.0);
         this.eWSaida = new Info(0.0, 0.0, 0.0);
-    }
+    }  
 
-    public void simulacao(double tempoMedioClientes, double tempoMedioAtendimento, double tempoSimulacao, double intervaloDeTempoConstante) {
-        
+    public void simulacao(double tempoMedioClientes, double tempoMedioAtendimento, double tempoSimulacao, double intervaloDeTempoConstante, int qtdCaixas) {
         System.out.printf("******DADOS INICIAIS******\n");
         System.out.printf("Tempo médio chegada de clientes: %.2f sg.\n", tempoMedioClientes);
         System.out.printf("Tempo médio de atendimento: %.2f sg.\n", tempoMedioAtendimento);
         System.out.printf("Tempo de simulacao: %.2f mlsg.\n", tempoSimulacao);
         
-        tempoMedioClientes = 1.0 / tempoMedioClientes;
-        tempoMedioAtendimento = 1.0 / tempoMedioAtendimento;
         chegadaCliente = (-1.0 / tempoMedioClientes) * log(controller.aleatorio());        
         double intervaloDeTempoVariavel = intervaloDeTempoConstante;
        
@@ -59,7 +56,7 @@ public class Execute {
             if (tempo == chegadaCliente) {
                 //evento de chegada de cliente
                 fila++;
-
+                
                 //indica que o caixa esta ocioso
                 //logo, pode-se comecar a atender
                 //o cliente que acaba de chegar
@@ -68,12 +65,12 @@ public class Execute {
                 }
                 //gerar o tempo de chegada do proximo cliente
                 chegadaCliente = tempo + (-1.0 / tempoMedioClientes) * log(controller.aleatorio());
-
+                
                 //calculo do E[N]
                 eN.somaAreas += eN.numeroEventos * (tempo - eN.tempoAnterior);
                 eN.tempoAnterior = tempo;
                 eN.numeroEventos++;
-
+                
                 //calculo do E[W]
                 eWEntrada.somaAreas += eWEntrada.numeroEventos * (tempo - eWEntrada.tempoAnterior);
                 eWEntrada.tempoAnterior = tempo;
@@ -100,7 +97,7 @@ public class Execute {
                     eN.somaAreas += eN.numeroEventos * (tempo - eN.tempoAnterior);
                     eN.tempoAnterior = tempo;
                     eN.numeroEventos--;
-
+                    
                     //calculo do E[W]
                     eWSaida.somaAreas += eWSaida.numeroEventos * (tempo - eWSaida.tempoAnterior);
                     eWSaida.tempoAnterior = tempo;

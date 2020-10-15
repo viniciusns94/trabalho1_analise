@@ -23,7 +23,7 @@ public class Controller {
     }
 
     public Double aleatorio() {
-        Double n = gerador.nextDouble();
+        Double n = 1.00 - gerador.nextDouble();
         return n;
     }
 
