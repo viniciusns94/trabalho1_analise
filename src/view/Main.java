@@ -14,7 +14,7 @@ public class Main {
     /**
      * @param args the command line arguments
      */
-    private static final Integer OCUPACAO_40 = 40, OCUPACAO_80 = 80, OCUPACAO_90 = 90, OCUPACAO_99 = 99; 
+    private static final Integer OCUPACAO_40 = 1, OCUPACAO_80 = 2, OCUPACAO_90 = 3, OCUPACAO_99 = 4; 
     
     public static void main(String[] args) {
         Start view = new Start();        

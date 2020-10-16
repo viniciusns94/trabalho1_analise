@@ -14,20 +14,21 @@ import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Info;
+import view.Start;
 
 /**
  *
  * @author Vinicius_2
  */
 public class Execute {
-    
+
     private double tempo, fila, chegadaCliente, somaAtendimentos;
     private final Controller controller;
     private final Info eN, eWEntrada, eWSaida;
     private final Queue<Double> filaSaidaAtendimento;
     private FileWriter arqEn, arqWn;
     private PrintWriter gravarArqEn, gravarArqWn;
-    
+
     public Execute() {
         this.controller = new Controller();
         this.fila = 0.0;
@@ -36,23 +37,21 @@ public class Execute {
         this.eWEntrada = new Info(0.0, 0.0, 0.0);
         this.eWSaida = new Info(0.0, 0.0, 0.0);
         this.filaSaidaAtendimento = new PriorityQueue<>();
-    }  
+    }
 
     public void simulacao(double tempoMedioClientes, double tempoMedioAtendimento, double tempoSimulacao, double intervaloDeTempoConstante, int qtdCaixas) {
-        System.out.printf("\n******DADOS INICIAIS******\n");
-        System.out.printf("Tempo médio chegada de clientes: %.2f\n", tempoMedioClientes);
-        System.out.printf("Tempo médio de atendimento: %.2f\n", tempoMedioAtendimento);
-        System.out.printf("Tempo de simulacao: %.2f\n", tempoSimulacao);
-        System.out.printf("Quantidade caixas disponíveis: %d\n", qtdCaixas);
-                
-        //adicionar fila de caixas
+//        System.out.printf("\n******DADOS INICIAIS******\n");
+//        System.out.printf("Tempo médio chegada de clientes: %.2f\n", tempoMedioClientes);
+//        System.out.printf("Tempo médio de atendimento: %.2f\n", tempoMedioAtendimento);
+
+        //Iniciando fila de atendimento caixas, colocando o valor sempre no fim da fila
         for (int i = 0; i < qtdCaixas; i++) {
-            filaSaidaAtendimento.add(0.0);
+            filaSaidaAtendimento.offer(0.0); 
         }
-        
-        chegadaCliente = (-1.0 / tempoMedioClientes) * log(controller.aleatorio());        
+
+        chegadaCliente = (-1.0 / tempoMedioClientes) * log(controller.aleatorio());
         double intervaloDeTempoVariavel = intervaloDeTempoConstante;
-       
+
         while (tempo <= tempoSimulacao) {
             //nao existe cliente sendo atendido no momento atual,
             //de modo que a simulacao pode avancar no tempo para
@@ -65,22 +64,22 @@ public class Execute {
             if (tempo == chegadaCliente) {
                 //evento de chegada de cliente
                 fila++;
-                
+
                 //indica que o caixa esta ocioso
                 //logo, pode-se comecar a atender
                 //o cliente que acaba de chegar
                 if (filaSaidaAtendimento.peek() == 0.0) {
-                    filaSaidaAtendimento.remove();//remove a cabeça da fila
-                    filaSaidaAtendimento.offer(tempo); //insere tempo  
+                    filaSaidaAtendimento.poll();//remove a cabeça da fila 
+                    filaSaidaAtendimento.offer(tempo); //insere novo tempo ao final 
                 }
                 //gerar o tempo de chegada do proximo cliente
                 chegadaCliente = tempo + (-1.0 / tempoMedioClientes) * log(controller.aleatorio());
-                
+
                 //calculo do E[N]
                 eN.somaAreas += eN.numeroEventos * (tempo - eN.tempoAnterior);
                 eN.tempoAnterior = tempo;
                 eN.numeroEventos++;
-                
+
                 //calculo do E[W]
                 eWEntrada.somaAreas += eWEntrada.numeroEventos * (tempo - eWEntrada.tempoAnterior);
                 eWEntrada.tempoAnterior = tempo;
@@ -97,9 +96,9 @@ public class Execute {
                 if (fila > 0.0) {
                     fila--;
                     double tempoAtendimento = (-1.0 / tempoMedioAtendimento) * log(controller.aleatorio());
-                    filaSaidaAtendimento.remove();//remove a cabeça da fila
+                    filaSaidaAtendimento.poll();//remove a cabeça da fila
                     filaSaidaAtendimento.offer(tempo + tempoAtendimento); //insere tempo na head 
-                    
+
                     somaAtendimentos += tempoAtendimento;
                 } else {
                     filaSaidaAtendimento.offer(0.0);
@@ -109,7 +108,7 @@ public class Execute {
                     eN.somaAreas += eN.numeroEventos * (tempo - eN.tempoAnterior);
                     eN.tempoAnterior = tempo;
                     eN.numeroEventos--;
-                    
+
                     //calculo do E[W]
                     eWSaida.somaAreas += eWSaida.numeroEventos * (tempo - eWSaida.tempoAnterior);
                     eWSaida.tempoAnterior = tempo;
@@ -122,8 +121,8 @@ public class Execute {
                     arqWn = new FileWriter("W[N].txt");
                     gravarArqEn = new PrintWriter(arqEn);
                     gravarArqWn = new PrintWriter(arqWn);
-                    gravarArqEn.printf("TEMPO\t\t\t\t\tE[N]\n");
-                    gravarArqWn.printf("TEMPO\t\t\t\t\tW[N]\n");
+                    gravarArqEn.printf("TEMPO\tE[N]\n");
+                    gravarArqWn.printf("TEMPO\tW[N]\n");
                 } else {
                     if (tempo >= intervaloDeTempoVariavel) {
                         intervaloDeTempoVariavel += intervaloDeTempoConstante;
@@ -159,12 +158,16 @@ public class Execute {
         } catch (IOException ex) {
             Logger.getLogger(Execute.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.printf("\n******DADOS FINAIS******\n");
+        System.out.printf("\n-------------------------------------------------------------------\n");
+        System.out.printf("Tempo de simulado: %.2f\n", tempoSimulacao);
+        System.out.printf("Quantidade caixas disponíveis: %d\n", qtdCaixas);
         System.out.printf("I) Tempo médio de atendimento: %.2f sg.\n", tempoMedioAtendimento);
         System.out.printf("II)\tOcupacao: %.5f\n", somaAtendimentos / tempo);
         System.out.printf("\tλ: %.5f\n", lambda);
         System.out.printf("\tE[N]: %.15f\n", eNFinal);
         System.out.printf("\tE[W]: %.10f\n", eW);
         System.out.printf("III)Validação little: %.15f\n", (eNFinal - lambda * eW));
+        System.out.printf("\n-------------------------------------------------------------------\n");
+        new Start().interfaceUsuario();
     }
 }
